@@ -5,5 +5,3 @@
 # ** for math pow
 
 # abs(num) for absolute number
-
-# int() float() str() bool() - only 0 false
