@@ -5,3 +5,4 @@
 # ** for math pow
 
 # abs(num) for absolute number
+# sum(array)

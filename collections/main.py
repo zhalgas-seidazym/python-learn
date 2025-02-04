@@ -1,7 +1,7 @@
 from collections import Counter, defaultdict, OrderedDict, deque, namedtuple, ChainMap
 
 # Создание счетчика из списка
-data = ['apple', 'banana', 'apple', 'orange', 'banana', 'apple']
+data = ['apple', 'banana', 'apple', 'orange', 'banana', 'apple'] #default puts 0
 counter = Counter(data)
 print(counter)  # Counter({'apple': 3, 'banana': 2, 'orange': 1})
 
