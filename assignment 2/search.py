@@ -17,92 +17,74 @@ def search_array_with_window(arr, target_sum, window_size, cur = None, recursive
         list: List of tuples containing valid window starting indices
     """
     size = len(arr)
-    # print(
-    #     f"Function called with: arr={arr}, target_sum={target_sum}, window_size={window_size}, cur={cur}, recursive={recursive}")
+
+    # res = []
+    # window_size_copy = window_size
+    # for i in range(size):
+    #     cur = 0
+    #     if i >= size - window_size:
+    #         window_size = size - i
+    #     for j in range(window_size):
+    #         cur += arr[i + j]
+    #         if cur == target_sum:
+    #             print(len(arr[i: i + j + 1]))
+    #             if len(arr[i: i + j + 1]) < window_size:
+    #                 res.append(tuple(arr[i: i + j + 1] + [0] * (window_size_copy - len(arr[i: i + j + 1]))))
+    #             else:
+    #                 res.append(tuple(arr[i: i + j + 1]))
+    # return res
+
 
     if not recursive:
         res = []
         arr.sort()
-        # print(f"Sorted arr: {arr}")
 
         if window_size == 1:
             for i in arr:
                 if i == target_sum:
-                    # print(f"Found element {i} matching target {target_sum}, appending to {cur}")
-                    res.append((i, ))
+                    res.append((i,))
                     return res
         elif window_size == size:
-            # print(f"Checking entire array: sum({arr}) == {target_sum}")
             return [tuple(arr)] if sum(arr) == target_sum else list()
-
         elif window_size > size:
-            # print(f"Window size {window_size} is larger than array size {size}, returning empty list.")
             return []
 
         i = 0
         while i <= size - window_size:
             for_cur = [arr[i]]
-            # print(f"Trying element {arr[i]} at index {i}, remaining array: {arr[i + 1:]}")
-
             if i > 0 and arr[i] == arr[i - 1]:
-                # print(f"Skipping duplicate element {arr[i]} at index {i}")
                 i += 1
                 continue
             else:
-                # print(
-                    # f"Recursive call with: arr={arr[i + 1:]}, target_sum={target_sum - arr[i]}, window_size={window_size - 1}, cur={for_cur}")
                 search_array_with_window(arr[i + 1:], target_sum - arr[i], window_size - 1, for_cur, True)
 
-            # print(f"Back from recursion: for_cur={for_cur}")
             for j in range(1, len(for_cur)):
                 if sum(for_cur[j]) == target_sum - for_cur[0]:
-                    # print(f"Found valid subarray: {for_cur}")
                     res.append(tuple([for_cur[0]] + for_cur[j]))
-
             i += 1
-
-        # print(f"Returning result: {res}")
         return res
-
-    else:  # Recursive case
-        # print(f"Recursive branch with: arr={arr}, target_sum={target_sum}, window_size={window_size}, cur={cur}")
-
+    else:
         if window_size == 1:
             for i in arr:
                 if i == target_sum:
-                    # print(f"Found element {i} matching target {target_sum}, appending to {cur}")
                     cur.append([i])
             return
-            # print(f"No element matches target {target_sum}")
-
         elif window_size == size:
-            # print(f"Checking full array: {arr}")
             if sum(arr) == target_sum:
-                # print(f"Entire array matches target sum, adding {arr} to {cur}")
                 cur.extend(arr)
                 return
             else:
-                # print(f"Sum of {arr} does not match target {target_sum}")
                 return
-
         elif window_size > size:
-            # print(f"Window size {window_size} is greater than array size {size}, returning.")
             return
-
         i = 0
-        while i <= size - window_size : # 1 2 3 4 le 4 w 2
+        while i <= size - window_size:
             for_cur = [arr[i]]
-            # print(f"Checking element {arr[i]} at index {i}, remaining array: {arr[i + 1:]}")
-
             search_array_with_window(arr[i + 1:], target_sum - arr[i], window_size - 1, for_cur, True)
-
             for j in range(1, len(for_cur)):
                 if sum(for_cur[j]) == target_sum - for_cur[0]:
-                    # print(f"Found valid subarray: {[for_cur[0]]} + {for_cur[j]}")
                     cur.append([for_cur[0]] + for_cur[j])
             i += 1
-
-        # print(f"Recursive function exiting for arr={arr}")
         return
 
 
@@ -125,8 +107,18 @@ def search_nested_dict(data, search_criteria):
     Returns:
         list: Keys of matching entries
     """
-    # Your implementation here
-    pass
+    nested_data = list()
+    for i in data:
+        check = True
+        for j in search_criteria:
+            criteria = j.split('.')
+            toCheck = data[i][criteria[0]]
+            for k in range(1, len(criteria)):
+                toCheck = toCheck.get(criteria[k])
+            if not search_criteria[j](toCheck):
+                check = False
+        if check: nested_data.append(i)
+    return nested_data
 
 
 def search_sets_intersection(sets_list, min_common_elements):
@@ -145,8 +137,14 @@ def search_sets_intersection(sets_list, min_common_elements):
     Returns:
         list: List of set pairs that meet the criteria
     """
-    # Your implementation here
-    pass
+
+    size = len(sets_list)
+    res = list()
+    for i in range(size):
+        for j in range(i + 1, size):
+            if len(sets_list[i].intersection(sets_list[j])) >= min_common_elements:
+                res.append((sets_list[i], sets_list[j]))
+    return res
 
 
 def search_string_patterns(text, pattern_rules):
@@ -171,8 +169,28 @@ def search_string_patterns(text, pattern_rules):
     Returns:
         list: All matching substrings
     """
-    # Your implementation here
-    pass
+    words = text.split()
+    matching_words = []
+
+    for word in words:
+        if 'min_length' in pattern_rules and len(word) < pattern_rules['min_length']:
+            continue
+
+        if 'must_contain' in pattern_rules:
+            if not all(char in word for char in pattern_rules['must_contain']):
+                continue
+
+        if 'must_start_with' in pattern_rules:
+            if not any(word.startswith(prefix) for prefix in pattern_rules['must_start_with']):
+                continue
+
+        if 'must_end_with' in pattern_rules:
+            if not any(word.endswith(suffix) for suffix in pattern_rules['must_end_with']):
+                continue
+
+        matching_words.append(word)
+
+    return matching_words
 
 
 # Test cases
@@ -210,23 +228,119 @@ def test_array_search():
 
 
 def test_dict_search():
-    # Your test case implementation here
-    pass
+    # Test Case 1: Basic matching criteria
+    data1 = {
+        'user1': {'name': 'John', 'scores': {'math': 90, 'physics': 85}},
+        'user2': {'name': 'Alice', 'scores': {'math': 95, 'physics': 90}},
+    }
+    criteria1 = {'scores.math': lambda x: x > 92, 'name': lambda x: 'i' in x.lower()}
+    print(search_nested_dict(data1, criteria1)) #['user2']
+
+    # Test Case 2: No matches
+    criteria2 = {'scores.math': lambda x: x > 100}
+    print(search_nested_dict(data1, criteria2)) #[]
+
+    # Test Case 3: Partial matches (one condition failing)
+    criteria3 = {'scores.physics': lambda x: x < 90, 'name': lambda x: 'J' in x}
+    print(search_nested_dict(data1, criteria3)) #['user1']
+
+    # Test Case 4: Complex nesting with missing key
+    data2 = {
+        'user1': {'name': 'Tom', 'details': {'age': 30, 'location': {'city': 'NY'}}},
+        'user2': {'name': 'Jerry', 'details': {'age': 25, 'location': {'city': 'LA'}}},
+    }
+    criteria4 = {'details.location.city': lambda x: x == 'LA'}
+    print(search_nested_dict(data2, criteria4)) #['user2']
+
+    # Test Case 5: Numeric condition on deeper level
+    data3 = {
+        'emp1': {'name': 'Bob', 'salary': {'base': 50000, 'bonus': 5000}},
+        'emp2': {'name': 'Alice', 'salary': {'base': 70000, 'bonus': 7000}},
+    }
+    criteria5 = {'salary.base': lambda x: x > 60000}
+    print(search_nested_dict(data3, criteria5)) #['emp2']
+
+    # Test Case 6: String condition with case insensitivity
+    criteria6 = {'name': lambda x: x.lower().startswith('b')}
+    print(search_nested_dict(data3, criteria6)) #['emp1']
 
 
 def test_sets_search():
-    # Your test case implementation here
-    pass
+    # Test Case 1: Basic case with two matching pairs
+    sets_list1 = [{1, 2, 3}, {2, 3, 4}, {4, 5, 6}, {1, 2, 5}]
+    min_common_elements1 = 2
+    print("Test Case 1:", search_sets_intersection(sets_list1, min_common_elements1))
+
+    # Test Case 2: No matching pairs
+    sets_list2 = [{1, 2, 3}, {4, 5, 6}, {7, 8, 9}]
+    min_common_elements2 = 2
+    print("Test Case 2:", search_sets_intersection(sets_list2, min_common_elements2))
+
+    # Test Case 3: All sets have at least min_common_elements in common
+    sets_list3 = [{1, 2, 3, 4}, {2, 3, 4, 5}, {3, 4, 5, 6}, {4, 5, 6, 7}]
+    min_common_elements3 = 2
+    print("Test Case 3:", search_sets_intersection(sets_list3, min_common_elements3))
+
+    # Test Case 4: Only one valid pair
+    sets_list4 = [{10, 20, 30}, {20, 30, 40}, {50, 60, 70}]
+    min_common_elements4 = 2
+    print("Test Case 4:", search_sets_intersection(sets_list4, min_common_elements4))
+
+    # Test Case 5: Minimum common elements set to 1 (matches multiple pairs)
+    sets_list5 = [{100, 200, 300}, {200, 300, 400}, {300, 400, 500}, {400, 500, 600}]
+    min_common_elements5 = 1
+    print("Test Case 5:", search_sets_intersection(sets_list5, min_common_elements5))
+
+    # Test Case 6: All sets are identical
+    sets_list6 = [{5, 10}, {5, 10}, {5, 10}]
+    min_common_elements6 = 2
+    print("Test Case 6:", search_sets_intersection(sets_list6, min_common_elements6))
+
+    # Test Case 7: Large sets with high min_common_elements
+    sets_list7 = [
+        set(range(1, 10)),
+        set(range(15, 25)),
+        set(range(15, 35)),
+        set(range(10, 15))
+    ]
+    min_common_elements7 = 5
+    print("Test Case 7:", search_sets_intersection(sets_list7, min_common_elements7))
+
+    # Test Case 8: Edge case with empty sets
+    sets_list8 = [set(), set(), {1, 2, 3}]
+    min_common_elements8 = 1
+    print("Test Case 8:", search_sets_intersection(sets_list8, min_common_elements8))
 
 
 def test_string_search():
-    # Your test case implementation here
-    pass
+    test_cases = [
+        ("The quick brown fox jumps over lazy dogs",
+         {'min_length': 4, 'must_contain': ['o', 'r'], 'must_start_with': ['b', 'f'], 'must_end_with': ['n', 'x']},
+         ['brown']),
+        ("hello world python programming",
+         {'min_length': 5, 'must_contain': ['o'], 'must_start_with': ['p'], 'must_end_with': ['n']}, ['python']),
+        ("apple banana cherry date",
+         {'min_length': 5, 'must_contain': ['a'], 'must_start_with': ['b', 'c'], 'must_end_with': ['y', 'e']}, []),
+        ("car cat dog cart", {'min_length': 3, 'must_contain': ['c'], 'must_start_with': ['c'], 'must_end_with': ['t']},
+         ['cat', 'cart']),
+        ("abcdefg hijklmnop qrstuv",
+         {'min_length': 7, 'must_contain': ['h', 'i'], 'must_start_with': ['h'], 'must_end_with': ['p']},
+         ['hijklmnop']),
+        ("fast furious fox fish",
+         {'min_length': 4, 'must_contain': ['f'], 'must_start_with': ['f'], 'must_end_with': ['t']}, ['fast']),
+        ("green garden gorilla grape",
+         {'min_length': 5, 'must_contain': ['g'], 'must_start_with': ['g'], 'must_end_with': ['e']}, ['grape'])
+    ]
+
+    for text, pattern_rules, expected in test_cases:
+        result = search_string_patterns(text, pattern_rules)
+        print(result, expected)
+        assert result == expected, f"Failed for: {text}. Expected: {expected}, Got: {result}"
 
 
 if __name__ == "__main__":
     # test_array_search()
-    test_dict_search()
-    test_sets_search()
+    # test_dict_search()
+    # test_sets_search()
     test_string_search()
     print("All tests passed successfully!")
