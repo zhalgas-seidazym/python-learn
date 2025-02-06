@@ -27,8 +27,7 @@ def search_array_with_window(arr, target_sum, window_size, cur = None, recursive
     #     for j in range(window_size):
     #         cur += arr[i + j]
     #         if cur == target_sum:
-    #             print(len(arr[i: i + j + 1]))
-    #             if len(arr[i: i + j + 1]) < window_size:
+    #             if len(arr[i: i + j + 1]) < window_size_copy:
     #                 res.append(tuple(arr[i: i + j + 1] + [0] * (window_size_copy - len(arr[i: i + j + 1]))))
     #             else:
     #                 res.append(tuple(arr[i: i + j + 1]))
@@ -195,6 +194,33 @@ def search_string_patterns(text, pattern_rules):
 
 # Test cases
 def test_array_search():
+    # test_cases = [
+    #     # Basic case with a simple target sum
+    #     ([1, 2, 3, 4, 5], 5, 3, [(2, 3, 0), (5, 0, 0)]),
+    #
+    #     # Case where subarray is at the beginning
+    #     ([1, 2, 3, 7, 5], 12, 3, [(2, 3, 7), (7, 5, 0)]),
+    #
+    #     # Case where the sum is found multiple times
+    #     ([1, 2, 3, 4, 2, 3], 6, 3, [(1, 2, 3), (4, 2, 0)]),
+    #
+    #     # Edge case with a single-element array
+    #     ([5], 5, 1, [(5,)]),
+    #
+    #     # Case where no subarray meets the sum
+    #     ([1, 1, 1, 1], 10, 2, []),
+    #
+    #     # Case with negative numbers
+    #     ([-1, -2, -3, 4, 6], 4, 3, [(4, 0, 0)]),
+    #
+    #     # Case where the sum is found at the end of the array
+    #     ([2, 4, 6, 8, 10], 18, 3, [(4, 6, 8), (8, 10, 0)])
+    # ]
+    #
+    # for arr, target_sum, window_size, expected in test_cases:
+    #     result = search_array_with_window(arr, target_sum, window_size)
+    #     print(result)
+
     # Test Case 1
     print(search_array_with_window([5, 3, 4, 6, 1], 9, 2))  # Expected Output: [(3, 6), (4, 5)]
 
@@ -211,8 +237,7 @@ def test_array_search():
     print(search_array_with_window([3, 5, 2], 10, 5))  # Expected Output: []
 
     # Test Case 6
-    print(search_array_with_window([1, 2, 3, 4, 5, 6], 9,
-                                   3))  # Expected Output: [(1, 2, 6), (1, 3, 5), (2, 3, 4)]
+    print(search_array_with_window([1, 2, 3, 4, 5, 6], 9, 3))  # Expected Output: [(1, 2, 6), (1, 3, 5), (2, 3, 4)]
 
     # Test Case 7
     print(search_array_with_window([5, 3, 4, 6, 1, 2, 7, 8, 9, 10], 20, 5))
@@ -339,8 +364,8 @@ def test_string_search():
 
 
 if __name__ == "__main__":
-    # test_array_search()
-    # test_dict_search()
-    # test_sets_search()
+    test_array_search()
+    test_dict_search()
+    test_sets_search()
     test_string_search()
     print("All tests passed successfully!")
