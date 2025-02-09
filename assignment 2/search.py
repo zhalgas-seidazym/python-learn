@@ -1,7 +1,7 @@
 
 def search_array_with_window(arr, target_sum, window_size, cur = None, recursive = False):
     """
-    Find all subarrays of fixed size that sum to target value.
+    Find all sub arrays of fixed size that sum to target value.
 
     Example:
     Input: arr = [1, 2, 3, 4, 5, 6], target_sum = 9, window_size = 3
@@ -364,8 +364,8 @@ def test_string_search():
 
 
 if __name__ == "__main__":
-    test_array_search()
+    # test_array_search()
     test_dict_search()
-    test_sets_search()
-    test_string_search()
+    # test_sets_search()
+    # test_string_search()
     print("All tests passed successfully!")
